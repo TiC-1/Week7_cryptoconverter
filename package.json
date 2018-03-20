@@ -1,0 +1,27 @@
+{
+  "name": "week7_cryptoconverter",
+  "version": "1.0.0",
+  "description": "A basic crypto currency converter",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TiC-1/Week7_cryptoconverter.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/TiC-1/Week7_cryptoconverter/issues"
+  },
+  "homepage": "https://github.com/TiC-1/Week7_cryptoconverter#readme",
+  "dependencies": {
+    "axios": "^0.18.0",
+    "express": "^4.16.3",
+    "handlebars": "^4.0.11"
+  },
+  "devDependencies": {
+    "supertest": "^3.0.0"
+  }
+}

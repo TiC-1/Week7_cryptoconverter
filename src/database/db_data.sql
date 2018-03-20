@@ -1,6 +1,5 @@
 BEGIN;
 
-
 INSERT INTO `currencies` (`id`, `name`, `code`) VALUES
 (1, 'US Dollars', 'USD'),
 (2, 'Euro', 'EUR'),

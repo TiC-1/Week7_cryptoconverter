@@ -5,7 +5,7 @@ A basic crypto currency converter
 JS fullstack development using:
 - Back-end:
   - Node https://nodejs.org/en/
-  - Express https://vuejs.org/
+  - Express http://expressjs.com/
   - Axios https://github.com/axios/axios
   - Handlebars https://handlebarsjs.com/
   - Supertest https://github.com/visionmedia/supertest

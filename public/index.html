@@ -14,10 +14,10 @@
 <body>
   <header>
     <h1>CRYPTONVERTER</h1>
+    <h3>Cryptocurrency <br>calculator & converter</h3>
   </header>
 
   <div class="wrapper">
-    <h3>Cryptocurrency <br>calculator & converter</h3>
 
     <div id="converter">
 
@@ -56,7 +56,7 @@
           {{ option.text }}
         </option>
       </select>
-        <span>Selected: {{ selected }}</span>
+        <span class="result">FROM: {{ selected }}</span>
       </div>
 
       <div id="field2">
@@ -65,7 +65,7 @@
           {{ option.text }}
         </option>
       </select>
-        <span>Selected: {{ selected }}</span>
+        <span class="result">TO: {{ selected }}</span>
       </div>
 
       <div id="textField">
@@ -77,11 +77,12 @@
 
 
 
-    <footer>
-      <p class="footerText">TIC APP</p>
-    </footer>
 
   </div>
+
+  <footer>
+    <p class="footerText">© TiC-1 APP</p>
+  </footer>
 
 
   <script src="./app.js"></script>

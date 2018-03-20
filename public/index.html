@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <title>CryptoConverter</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="./style.css">
+  <script src="./vue.js"></script>
+
+
+</head>
+
+<body>
+  <header>
+    <h1>CRYPTONVERTER</h1>
+  </header>
+
+  <div class="wrapper">
+    <h3>Cryptocurrency <br>calculator & converter</h3>
+
+    <div id="converter">
+
+      <!-- <form>
+        <fieldset>
+          <p>
+            <label>FROM</label>
+            <select id="myList">
+                 <option value = "1">one</option>
+                 <option value = "2">two</option>
+                 <option value = "3">three</option>
+                 <option value = "4">four</option>
+               </select>
+          </p>
+        </fieldset>
+
+        <fieldset>
+          <p>
+            <label>TO</label>
+            <select id="myList">
+                 <option value = "1">one</option>
+                 <option value = "2">two</option>
+                 <option value = "3">three</option>
+                 <option value = "4">four</option>
+               </select>
+          </p>
+        </fieldset>
+
+
+
+      </form> -->
+
+      <div id="field1">
+      <select v-model="selected">
+        <option v-for="option in options" v-bind:value="option.value">
+          {{ option.text }}
+        </option>
+      </select>
+        <span>Selected: {{ selected }}</span>
+      </div>
+
+      <div id="field2">
+      <select v-model="selected">
+        <option v-for="option in options" v-bind:value="option.value">
+          {{ option.text }}
+        </option>
+      </select>
+        <span>Selected: {{ selected }}</span>
+      </div>
+
+      <div id="textField">
+        <input v-model="message" placeholder="Enter amount">
+        <p>{{ message }}</p>
+      </div>
+
+    </div>
+
+
+
+    <footer>
+      <p class="footerText">TIC APP</p>
+    </footer>
+
+  </div>
+
+
+  <script src="./app.js"></script>
+</body>
+
+</html>

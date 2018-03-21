@@ -1,8 +1,31 @@
 var test = require("tape");
 // var supertest = require("supertest");
+var db = require("../src/database/db_connection.js");
 var populateDb = require("../src/database/db_populate.js");
 var queries = require("../src/database/db_queries.js");
 var functions = require("../src/functions.js");
+
+data = [{
+    id: 1,
+    name: 'US Dollar',
+    code: 'USD'
+  },
+  {
+    id: 2,
+    name: 'Euro',
+    code: 'EUR'
+  },
+  {
+    id: 3,
+    name: 'Bitcoin',
+    code: 'BTC'
+  },
+  {
+    id: 4,
+    name: 'Ethereum',
+    code: 'ETH'
+  }
+]
 
 test("Populate the database", function(assert) {
   populateDb(function() {
@@ -11,53 +34,50 @@ test("Populate the database", function(assert) {
   });
 });
 
-test("Test get currencies from database", function(assert) {
+test("Test getCurrenciesTableData function", function(assert) {
   console.log("Enter Test function");
-  queries.getCurrencies()
-  .then(result => {
-    console.log("TEST RESULT =", result);
-    assert.ok(result[0].hasOwnProperty("id"), "result has 'id' property");
+  queries.getCurrenciesTableData()
+    .then(result => {
+      console.log("TEST RESULT =", result);
+      assert.ok(result[0].hasOwnProperty("id"), "result has 'id' property");
+      assert.end();
+    });
+});
+
+test("Test listCurrenciesCodes function", function(assert) {
+  console.log("Enter Test function");
+  codes = functions.listCurrenciesCodes(data);
+  console.log("TEST RESULT =", codes);
+  assert.ok(codes.length > 0, "array has length > 0");
+  assert.equal(codes[3], "ETH", "array has 'ETH' value");
+  assert.end();
+});
+
+test("Test combineCurrenciesCodes function", function(assert) {
+  console.log("Enter Test function");
+  combinations = functions.combineCurrenciesCodes(codes)
+  console.log("TEST RESULT =", combinations);
+  assert.ok(combinations.length > 0, "array has length > 0");
+  assert.equal(combinations[11], "ETH-BTC", "array has 'ETH-BTC' value");
+  assert.end();
+});
+
+test("Test getRatesFromAPI function", function(assert) {
+  console.log("Enter Test function");
+  var rates = functions.getRatesFromAPI(combinations)
+    .then(result => {
+      console.log("TEST RESULT =", rates);
+      assert.ok(codes.length > 0, "array has length > 0");
+      assert.end();
+    });
+});
+
+
+
+
+
+test("End pool connection", function(assert) {
+  db.end(function() {
     assert.end();
   });
 });
-
-// test("Create a task", function(assert) {
-//   supertest(tasksHandler.create)
-//     .post("/task/create")
-//     // Test escape function whith query injection while creating the new task
-//     .send("title=My new task&users=1&users=';DELETE FROM tasks_assignments;")
-//     .end(function(err, result) {
-//       if (err) {
-//         console.error(err);
-//       }
-//       db.query("SELECT * FROM tasks WHERE title='My new task'",
-//         function(err, result) {
-//           console.log(result.rows);
-//           assert.ok(result.rows.length >= 1, "A new task has been created");
-//           assert.end();
-//         });
-//     });
-// });
-//
-// test("Delete a task", function(assert) {
-//   supertest(tasksHandler.deleteTask)
-//     .post("/task/delete")
-//     .send("id=1")
-//     .end(function(err, result) {
-//       if (err) {
-//         console.error(err);
-//       }
-//       db.query("SELECT * FROM tasks_assignments WHERE task_id=1",
-//         function(err, result) {
-//           console.log(result.rows);
-//           assert.ok(result.rows.length == 0, "Task with id=1 has been deleted in tasks list and tasks assigments");
-//           assert.end();
-//         });
-//     });
-// });
-//
-// // test("End pool connection", function(assert) {
-// //   db.end(function() {
-// //     assert.end();
-// //   });
-// // });

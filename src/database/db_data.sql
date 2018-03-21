@@ -1,7 +1,7 @@
 BEGIN;
 
 INSERT INTO currencies (id, name, code) VALUES
-(1, 'US Dollars', 'USD'),
+(1, 'US Dollar', 'USD'),
 (2, 'Euro', 'EUR'),
 (3, 'Bitcoin', 'BTC'),
 (4, 'Ethereum', 'ETH');

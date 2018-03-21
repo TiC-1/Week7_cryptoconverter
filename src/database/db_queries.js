@@ -5,8 +5,8 @@ var querystring = require("querystring");
 
 
 // Get currencies from currencies table
-function getCurrencies() {
-  console.log("Enter getCurrencies function");
+function getCurrenciesTableData() {
+  console.log("Enter getCurrenciesTableData function");
   return db.query("SELECT * FROM currencies;")
     .then(result => {
       console.log("QUERY RESULT = ", result.rows);
@@ -15,5 +15,5 @@ function getCurrencies() {
 }
 
 module.exports = {
-  getCurrencies: getCurrencies
+  getCurrenciesTableData: getCurrenciesTableData
 }

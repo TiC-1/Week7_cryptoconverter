@@ -1,32 +1,58 @@
 // GENERIC SHARED PURE FUNCTIONS
 
 var querystring = require("querystring");
+var axios = require("axios");
+var queries = require("./database/db_queries.js");
 
 
-// List currencies in database
-function listCurrencies(currencies) {
-    currencies = JSON.stringify(currencies.rows);
-    console.log(currencies);
-    return currencies;
- }
+// List currencies code in an array
+function listCurrenciesCodes(currenciesData) {
+  console.log("Enter listCurrenciesCodes function");
+  console.log(currenciesData);
+  var currenciesCodes = [];
+  currenciesData.forEach(function(item) {
+    currenciesCodes.push(item.code);
+  });
+  console.log(currenciesCodes);
+  return currenciesCodes;
+}
 
+// list currencies codes combinations in an array
+function combineCurrenciesCodes(currenciesCodesList) {
+  console.log("Enter combineCurrenciesCodes function");
+  currenciesCombinations = [];
+  currenciesCodesList.forEach(function(element1) {
+    currenciesCodesList.forEach(function(element2) {
+      if (element2 != element1) {
+        currenciesCombinations.push(element1 + '-' + element2);
+      } else {
+        return;
+      }
+    });
+  });
+  console.log("CURRENCIES COMBINATIONS = ", currenciesCombinations);
+  return currenciesCombinations;
+}
 
+function getRatesFromAPI(currenciesCombinationsList) {
+  console.log("Enter getRatesFromAPI function");
+  currenciesCombinationsList.forEach(function(element) {
+    var endURL = element.toLowerCase();
+    axios.get("https://api.cryptonator.com/api/ticker/" + endURL, {maxRedirects: 5})
+      .then(function(response) {
+        console.log(response.data);
+        response = response.data;
+        var from = response.ticker.base;
+        var to = response.ticker.target;
+        var rate = response.ticker.price;
+        var timestamp = response.timestamp;
+        queries.updateRatesTable(from, to, rate, timestamp);
+      });
+  });
+}
 
-// function getCombinations() {
-//   var currencies_id = [1, 2, 3, 4];
-//   var results = [];
-//
-//   for (var i = 0; i < currencies_id.length; i++) {
-//     for (var j = 0; j < currencies_id.length; j++) {
-//       results.push(currencies_id[i] + ' ' + currencies_id[j]);
-//     }
-//   }
-  // ["1 1", "1 2", "1 3", "1 4",
-  // "2 1", "2 2", "2 3", "2 4",
-  // "3 1," "3 2", "3 3", "3 4",
-  // "4 1", "4 2", "4 3", "4 4"]
-//
-//   console.log(results);
-// }
-
-module.exports = listCurrencies;
+module.exports = {
+  listCurrenciesCodes: listCurrenciesCodes,
+  combineCurrenciesCodes: combineCurrenciesCodes,
+  getRatesFromAPI: getRatesFromAPI
+}

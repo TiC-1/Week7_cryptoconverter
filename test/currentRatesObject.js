@@ -59,3 +59,5 @@ function provideCurrentRates() {
   ];
   return currentRates;
 }
+
+module.exports = provideCurrentRates;

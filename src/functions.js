@@ -1,22 +1,16 @@
 // GENERIC SHARED PURE FUNCTIONS
 
-var db = require("./database/db_connection.js");
 var querystring = require("querystring");
 
 
 // List currencies in database
-function listCurrencies(request, response) {
-  db.query("SELECT * FROM currencies;", function(err, result) {
-    if (err) {
-      console.log("error!");
-      return response.end();
-    }
-    var curr = response.end(JSON.stringify(result.rows));
-    console.log(curr);
-  });
-}
+function listCurrencies(currencies) {
+    currencies = JSON.stringify(currencies.rows);
+    console.log(currencies);
+    return currencies;
+ }
 
-listCurrencies();
+
 
 // function getCombinations() {
 //   var currencies_id = [1, 2, 3, 4];

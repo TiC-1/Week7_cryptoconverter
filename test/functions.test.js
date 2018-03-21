@@ -1,7 +1,7 @@
 var test = require("tape");
-var supertest = require("supertest");
-var db = require("../src/database/db_connection.js");
+// var supertest = require("supertest");
 var populateDb = require("../src/database/db_populate.js");
+var queries = require("../src/database/db_queries.js");
 var functions = require("../src/functions.js");
 
 test("Populate the database", function(assert) {
@@ -11,21 +11,15 @@ test("Populate the database", function(assert) {
   });
 });
 
-test("Array of currencies", function(assert) {
-  // supertest(functions.listCurrencies)
-    // .end(function(err, result) {
-    //   if (err) {
-    //     console.error(err);
-    //     assert.fail();
-    //   }
-    functions.listCurrencies();
-      var parsedResult = JSON.parse(result.text);
-      console.log(result.text);
-      // assert.ok(parsedResult.length > 0, "list has items");
-      // assert.ok(parsedResult[0].hasOwnProperty("assign"), "items has an assign property");
-      // assert.ok(parsedResult[0].assign[0].hasOwnProperty("username"), "assign property has an username property");
-      assert.end();
-    });
+test("Test get currencies from database", function(assert) {
+  console.log("Enter Test function");
+  queries.getCurrencies()
+  .then(result => {
+    console.log("TEST RESULT =", result);
+    assert.ok(result[0].hasOwnProperty("id"), "result has 'id' property");
+    assert.end();
+  });
+});
 
 // test("Create a task", function(assert) {
 //   supertest(tasksHandler.create)

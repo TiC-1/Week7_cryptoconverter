@@ -1,12 +1,12 @@
 BEGIN;
 
-INSERT INTO `currencies` (`id`, `name`, `code`) VALUES
+INSERT INTO currencies (id, name, code) VALUES
 (1, 'US Dollars', 'USD'),
 (2, 'Euro', 'EUR'),
 (3, 'Bitcoin', 'BTC'),
 (4, 'Ethereum', 'ETH');
 
-INSERT INTO 'rates' ('fromcurrency_id', 'tocurrency_id', 'rates', 'timestamp') VALUES
+INSERT INTO rates (fromcurrency_id, tocurrency_id, rate, timestamp) VALUES
 (1, 2, 1.2, 153539461),
 (1, 3, 1.2, 153539461),
 (1, 4, 1.2, 153539461),

@@ -62,22 +62,32 @@ test("Test combineCurrenciesCodes function", function(assert) {
   assert.end();
 });
 
-test("Test getRatesFromAPI function", function(assert) {
+test("Test updateRatesTable function", function(assert) {
   console.log("Enter Test function");
-  var rates = functions.getRatesFromAPI(combinations)
+  queries.updateRatesTable('USD', 'EUR', 123.2345, 909098765);
+  assert.end();
+});
+
+
+test("Test getRatesTableData function", function(assert) {
+  console.log("Enter Test function");
+  queries.getRatesTableData()
     .then(result => {
-      console.log("TEST RESULT =", rates);
-      assert.ok(codes.length > 0, "array has length > 0");
+      console.log("TEST RESULT =", result);
+      assert.ok(result[0].hasOwnProperty("fromcurrency_id"), "result has 'fromcurrency_id' property");
       assert.end();
     });
 });
 
-
-
-
-
-test("End pool connection", function(assert) {
-  db.end(function() {
-    assert.end();
-  });
+test("Test getRatesFromAPI function", function(assert) {
+  console.log("Enter Test function");
+  functions.getRatesFromAPI(combinations);
+  assert.end();
 });
+
+
+// test("End pool connection", function(assert) {
+//   db.end(function() {
+//     assert.end();
+//   });
+// });

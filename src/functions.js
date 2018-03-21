@@ -1,6 +1,8 @@
 // GENERIC SHARED PURE FUNCTIONS
 
 var querystring = require("querystring");
+var axios = require("axios");
+var queries = require("./database/db_queries.js");
 
 
 // List currencies code in an array
@@ -34,16 +36,19 @@ function combineCurrenciesCodes(currenciesCodesList) {
 
 function getRatesFromAPI(currenciesCombinationsList) {
   console.log("Enter getRatesFromAPI function");
-  var ratesFromAPI = [];
   currenciesCombinationsList.forEach(function(element) {
     var endURL = element.toLowerCase();
-    axios.get("https://api.cryptonator.com/api/ticker/" + endURL)
-      .then(result => {
-        array.push(result);
+    axios.get("https://api.cryptonator.com/api/ticker/" + endURL, {maxRedirects: 5})
+      .then(function(response) {
+        console.log(response.data);
+        response = response.data;
+        var from = response.ticker.base;
+        var to = response.ticker.target;
+        var rate = response.ticker.price;
+        var timestamp = response.timestamp;
+        queries.updateRatesTable(from, to, rate, timestamp);
       });
   });
-  console.log(ratesFromAPI)
-  return ratesFromAPI;
 }
 
 module.exports = {

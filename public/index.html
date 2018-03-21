@@ -14,77 +14,46 @@
 <body>
   <header>
     <h1>CRYPTONVERTER</h1>
-    <h3>Cryptocurrency <br>calculator & converter</h3>
+    <h3>Cryptocurrency
+      <br>calculator & converter</h3>
   </header>
 
   <div class="wrapper">
 
     <div id="converter">
 
-      <!-- <form>
-        <fieldset>
-          <p>
-            <label>FROM</label>
-            <select id="myList">
-                 <option value = "1">one</option>
-                 <option value = "2">two</option>
-                 <option value = "3">three</option>
-                 <option value = "4">four</option>
-               </select>
-          </p>
-        </fieldset>
-
-        <fieldset>
-          <p>
-            <label>TO</label>
-            <select id="myList">
-                 <option value = "1">one</option>
-                 <option value = "2">two</option>
-                 <option value = "3">three</option>
-                 <option value = "4">four</option>
-               </select>
-          </p>
-        </fieldset>
-
-
-
-      </form> -->
-
       <div id="field1">
-      <select v-model="selected">
-        <option v-for="option in options" v-bind:value="option.value">
-          {{ option.text }}
-        </option>
-      </select>
-        <span class="result">FROM: {{ selected }}</span>
+        <select v-model="front_from_currency">
+          <option v-for="option in options">
+            {{ option }}
+          </option>
+        </select>
+        <span class="result">FROM: {{ front_from_currency }}</span>
       </div>
 
       <div id="field2">
-      <select v-model="selected">
-        <option v-for="option in options" v-bind:value="option.value">
-          {{ option.text }}
-        </option>
-      </select>
-        <span class="result">TO: {{ selected }}</span>
+        <select v-model="front_to_currency">
+          <option v-for="option in options">
+            {{ option }}
+          </option>
+        </select>
+        <span class="result">TO: {{ front_to_currency }}</span>
       </div>
 
       <div id="textField">
         <input v-model="message" placeholder="Enter amount">
-        <p>{{ message }}</p>
+        <p>{{ conv_result }}</p>
       </div>
 
     </div>
-
-
-
-
+    
   </div>
 
   <footer>
     <p class="footerText">© TiC-1 APP</p>
   </footer>
 
-
+  <script src="./object.js"></script>
   <script src="./app.js"></script>
 </body>
 

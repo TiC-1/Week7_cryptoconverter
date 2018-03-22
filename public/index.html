@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <title>CryptoConverter</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="./style.css">
+  <script src="./vue.js"></script>
+
+
+</head>
+
+<body>
+  <header>
+    <h1>CRYPTONVERTER</h1>
+    <h3>Cryptocurrency
+      <br>calculator & converter</h3>
+  </header>
+
+  <div class="wrapper">
+
+    <div id="converter">
+
+      <div id="field1">
+        <select v-model="front_from_currency">
+          <option v-for="option in options">
+            {{ option }}
+          </option>
+        </select>
+        <span class="result">FROM: {{ front_from_currency }}</span>
+      </div>
+
+      <div id="field2">
+        <select v-model="front_to_currency">
+          <option v-for="option in options">
+            {{ option }}
+          </option>
+        </select>
+        <span class="result">TO: {{ front_to_currency }}</span>
+      </div>
+
+      <div id="textField">
+        <input v-model="message" placeholder="Enter amount">
+        <p>{{ conv_result }}</p>
+      </div>
+
+    </div>
+    
+  </div>
+
+  <footer>
+    <p class="footerText">© TiC-1 APP</p>
+  </footer>
+
+  <script src="./object.js"></script>
+  <script src="./app.js"></script>
+</body>
+
+</html>

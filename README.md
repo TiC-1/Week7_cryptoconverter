@@ -12,6 +12,8 @@ JS fullstack development using:
 - Font-end
   - Vue https://vuejs.org/
   - QUnit https://qunitjs.com/
+- Test
+  - Travis https://github.com/dwyl/learn-travis
 
 ## API
 We'll use https://www.cryptonator.com/api/

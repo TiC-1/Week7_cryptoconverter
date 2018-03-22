@@ -12,7 +12,7 @@ CREATE TABLE rates (
   fromcurrency_id int NOT NULL,
   tocurrency_id int NOT NULL,
   rate float NOT NULL,
-  timestamp int NOT NULL
+  timestamp timestamp NOT NULL
 );
 
 COMMIT;

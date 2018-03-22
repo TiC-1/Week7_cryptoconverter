@@ -7,52 +7,79 @@ var queries = require("./database/db_queries.js");
 
 // List currencies code in an array
 function listCurrenciesCodes(currenciesData) {
-  console.log("Enter listCurrenciesCodes function");
-  console.log(currenciesData);
   var currenciesCodes = [];
-  currenciesData.forEach(function(item) {
-    currenciesCodes.push(item.code);
+  currenciesData.forEach(element => {
+    currenciesCodes.push(element.code);
   });
-  console.log(currenciesCodes);
   return currenciesCodes;
 }
 
 // list currencies codes combinations in an array
 function combineCurrenciesCodes(currenciesCodesList) {
-  console.log("Enter combineCurrenciesCodes function");
   currenciesCombinations = [];
-  currenciesCodesList.forEach(function(element1) {
-    currenciesCodesList.forEach(function(element2) {
-      if (element2 != element1) {
+  currenciesCodesList.forEach(element1 => {
+    currenciesCodesList.forEach(element2 => {
+      if (element2 != element1) { // exclude same to same combination
         currenciesCombinations.push(element1 + '-' + element2);
       } else {
         return;
       }
     });
   });
-  console.log("CURRENCIES COMBINATIONS = ", currenciesCombinations);
   return currenciesCombinations;
 }
 
+// get change rates from 'cryptonator' API based on currencies combinations
 function getRatesFromAPI(currenciesCombinationsList) {
-  console.log("Enter getRatesFromAPI function");
-  currenciesCombinationsList.forEach(function(element) {
-    var endURL = element.toLowerCase();
-    axios.get("https://api.cryptonator.com/api/ticker/" + endURL, {maxRedirects: 5})
-      .then(function(response) {
-        console.log(response.data);
-        response = response.data;
+  var requests = currenciesCombinationsList.map( (e) => {
+    return axios.get("https://api.cryptonator.com/api/ticker/" + e.toLowerCase());
+  })
+  return axios.all(requests).then(axios.spread(async (...results) => {
+    for(var i=0; i<results.length; i++) {
+      response = results[i].data;
+      if(response.ticker) {
         var from = response.ticker.base;
         var to = response.ticker.target;
         var rate = response.ticker.price;
         var timestamp = response.timestamp;
-        queries.updateRatesTable(from, to, rate, timestamp);
-      });
+        await queries.updateRatesTable(from, to, rate, timestamp); // run query to write into database
+      }
+    }
+  })).catch((err) => {
+    console.error(err.response.status);
   });
+}
+
+function getCurrenciesCombinations() {
+  return queries.getCurrenciesTableData()
+    .then((result) => {
+      var codes = listCurrenciesCodes(result);
+      return combineCurrenciesCodes(codes);
+    }).catch((err) => {
+      console.log(err);
+    });
+}
+
+function checkRatesAge() {
+  return queries.getRatesAge()
+    .then(async result => {
+      var timeDifference = Date.now() - Date.parse(result[0].min);
+      // If rates are to old run request to API
+      if (timeDifference >= 10 * 60 * 1000) { // 10 minutes
+        await getCurrenciesCombinations().then(async (result) => {
+          await getRatesFromAPI(result);
+          return false;
+        });
+      }
+      return true;
+    }).catch((err) => {
+      console.log(err);
+    });
 }
 
 module.exports = {
   listCurrenciesCodes: listCurrenciesCodes,
   combineCurrenciesCodes: combineCurrenciesCodes,
-  getRatesFromAPI: getRatesFromAPI
+  getRatesFromAPI: getRatesFromAPI,
+  checkRatesAge: checkRatesAge
 }

@@ -4,38 +4,53 @@ var db = require("./db_connection.js");
 var querystring = require("querystring");
 
 
-// Read data from currencies table
+// Get currencies data
 function getCurrenciesTableData() {
-  console.log("Enter getCurrenciesTableData function");
   return db.query("SELECT * FROM currencies;")
     .then(result => {
-      console.log("QUERY RESULT = ", result.rows);
       return (result.rows);
     });
 }
 
-// Read data from rates table
+// Get rates data
 function getRatesTableData() {
-  console.log("Enter getRatesTableData function");
   return db.query("SELECT * FROM rates;")
     .then(result => {
-      console.log("QUERY RESULT = ", result.rows);
       return (result.rows);
     });
 }
 
-// Write (update) data into rates table
-function updateRatesTable(base, target, rate, timestamp) {
-  console.log("Enter updateRatesData function");
-  console.log(base, target, rate, timestamp);
-  db.query("DELETE FROM rates WHERE fromcurrency_id=(SELECT id FROM currencies WHERE code=$1) AND tocurrency_id=(SELECT id FROM currencies WHERE code=$2);", [base, target])
+// Get rates and currencies specific data in order to build an array of objects
+// on that schema { fromcurrency_id: 123, tocurrency_id: 456, change_rate: 0.789 }
+function getCurrenciesAndRatesData() {
+  return db.query("SELECT (SELECT name AS from_currency FROM currencies WHERE id=fromcurrency_id), (SELECT name AS to_currency FROM currencies WHERE id=tocurrency_id), rate AS change_rate FROM rates;")
+    .then(result => {
+      return (result.rows);
+    });
+}
+
+// Update data into rates table
+function updateRatesTable(from, to, rate, timestamp) {
+  // delete row where 'from' and 'to' currencies match to actual values
+  db.query("DELETE FROM rates WHERE fromcurrency_id=(SELECT id FROM currencies WHERE code=$1) AND tocurrency_id=(SELECT id FROM currencies WHERE code=$2);", [from, to])
     .then(function() {
-      db.query("INSERT INTO rates VALUES ((SELECT id FROM currencies WHERE code=$1), (SELECT id FROM currencies WHERE code=$2), $3, $4);", [base, target, rate, timestamp]);
+      // add row where 'from' and 'to' currecies match to actual values
+      db.query("INSERT INTO rates VALUES ((SELECT id FROM currencies WHERE code=$1), (SELECT id FROM currencies WHERE code=$2), $3, $4);", [from, to, rate, timestamp]);
     })
+}
+
+// Get oldest rate age based on his timestamp
+function getRatesAge() {
+  return db.query("SELECT MIN(timestamp) FROM rates;")
+    .then(result => {
+      return (result.rows);
+    });
 }
 
 module.exports = {
   getCurrenciesTableData: getCurrenciesTableData,
   getRatesTableData: getRatesTableData,
-  updateRatesTable: updateRatesTable
+  getCurrenciesAndRatesData: getCurrenciesAndRatesData,
+  updateRatesTable: updateRatesTable,
+  getRatesAge: getRatesAge
 }

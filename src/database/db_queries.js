@@ -30,13 +30,11 @@ function getCurrenciesAndRatesData() {
 }
 
 // Update data into rates table
-function updateRatesTable(from, to, rate, timestamp) {
+async function updateRatesTable(from, to, rate, timestamp) {
   // delete row where 'from' and 'to' currencies match to actual values
-  db.query("DELETE FROM rates WHERE fromcurrency_id=(SELECT id FROM currencies WHERE code=$1) AND tocurrency_id=(SELECT id FROM currencies WHERE code=$2);", [from, to])
-    .then(function() {
-      // add row where 'from' and 'to' currecies match to actual values
-      db.query("INSERT INTO rates VALUES ((SELECT id FROM currencies WHERE code=$1), (SELECT id FROM currencies WHERE code=$2), $3, $4);", [from, to, rate, timestamp]);
-    })
+  await db.query("DELETE FROM rates WHERE fromcurrency_id=(SELECT id FROM currencies WHERE code=$1) AND tocurrency_id=(SELECT id FROM currencies WHERE code=$2);", [from, to]);
+  // add row where 'from' and 'to' currecies match to actual values
+  return await db.query("INSERT INTO rates VALUES ((SELECT id FROM currencies WHERE code=$1), (SELECT id FROM currencies WHERE code=$2), $3, to_timestamp($4)) RETURNING fromcurrency_id;", [from, to, rate, timestamp]);
 }
 
 // Get oldest rate age based on his timestamp

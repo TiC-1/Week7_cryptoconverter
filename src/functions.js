@@ -31,33 +31,40 @@ function combineCurrenciesCodes(currenciesCodesList) {
 
 // get change rates from 'cryptonator' API based on currencies combinations
 function getRatesFromAPI(currenciesCombinationsList) {
-  currenciesCombinationsList.forEach(element => {
-    var endURL = element.toLowerCase();
-    axios.get("https://api.cryptonator.com/api/ticker/" + endURL, {
-        maxRedirects: 5
-      })
-      .then(response => {
-        response = response.data;
+  var requests = currenciesCombinationsList.map( (e) => {
+    return axios.get("https://api.cryptonator.com/api/ticker/" + e.toLowerCase());
+  })
+  return axios.all(requests).then(axios.spread((...results) => {
+    for(var i=0; i<results.length; i++) {
+      response = results[i].data;
+      if(response.ticker) {
         var from = response.ticker.base;
         var to = response.ticker.target;
         var rate = response.ticker.price;
         var timestamp = response.timestamp;
         queries.updateRatesTable(from, to, rate, timestamp); // run query to write into database
-      });
+      }
+    }
+  })).catch((err) => {
+    console.error(err);
   });
 }
 
 function checkRatesAge() {
-  queries.getRatesAge()
+  return queries.getRatesAge()
     .then(result => {
+      var timeDifference = Date.now() - Date.parse(result[0].min);
       // If rates are to old run request to API
-      if (Date.now() - result >= 10 * 60 * 1000) { // 10 minutes
+      if (timeDifference >= 10 * 60 * 1000) { // 10 minutes
         getRatesFromAPI();
+        return false;
       }
+      return true;
     });
 }
 module.exports = {
   listCurrenciesCodes: listCurrenciesCodes,
   combineCurrenciesCodes: combineCurrenciesCodes,
-  getRatesFromAPI: getRatesFromAPI
+  getRatesFromAPI: getRatesFromAPI,
+  checkRatesAge: checkRatesAge
 }

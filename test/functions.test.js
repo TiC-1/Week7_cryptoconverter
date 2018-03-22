@@ -43,6 +43,8 @@ test("Test getCurrenciesTableData function", function(assert) {
       assert.ok(result[0].hasOwnProperty("name"), "result has 'name' property");
       assert.ok(result[0].hasOwnProperty("code"), "result has 'code' property");
       assert.end();
+    }).catch((err) => {
+      console.log(err);
     });
 });
 
@@ -70,7 +72,9 @@ test("Test updateRatesTable function", function(assert) {
     assert.ok(true, "updateRatesTable function has been executed");
     assert.ok(result.rows.length === 1, "rates table should contain one row");
     assert.end();
-  })
+  }).catch((err) => {
+    console.log(err);
+  });
 });
 
 
@@ -82,6 +86,8 @@ test("Test getRatesTableData function", function(assert) {
       assert.ok(result[0].hasOwnProperty("rate"), "result has 'rate' property");
       assert.ok(result[0].hasOwnProperty("timestamp"), "result has 'timestamp' property");
       assert.end();
+    }).catch((err) => {
+      console.log(err);
     });
 });
 
@@ -93,6 +99,8 @@ test("Test getCurrenciesAndRatesData function", function(assert) {
       assert.ok(result[0].hasOwnProperty("to_currency"), "result has 'to_currency' property");
       assert.ok(result[0].hasOwnProperty("change_rate"), "result has 'change_rate' property");
       assert.end();
+    }).catch((err) => {
+      console.log(err);
     });
 });
 
@@ -102,7 +110,11 @@ test("Test getRatesFromAPI function", function(assert) {
     queries.getRatesTableData().then((rows) => {
       assert.ok(rows[0].hasOwnProperty("fromcurrency_id"), "result has 'fromcurrency_id' property");
       assert.end();
+    }).catch((err) => {
+      console.log(err);
     });
+  }).catch((err) => {
+    console.log(err);
   });
 });
 
@@ -110,7 +122,9 @@ test("Test checkRatesAge function", function(assert) {
   functions.checkRatesAge().then(result => {
     assert.ok(result, "Data should be updated");
     assert.end();
-  })
+  }).catch((err) => {
+    console.log(err);
+  });
 });
 
 test("End pool connection", function(assert) {

@@ -34,7 +34,7 @@ function getRatesFromAPI(currenciesCombinationsList) {
   var requests = currenciesCombinationsList.map( (e) => {
     return axios.get("https://api.cryptonator.com/api/ticker/" + e.toLowerCase());
   })
-  return axios.all(requests).then(axios.spread((...results) => {
+  return axios.all(requests).then(axios.spread(async (...results) => {
     for(var i=0; i<results.length; i++) {
       response = results[i].data;
       if(response.ticker) {
@@ -42,34 +42,38 @@ function getRatesFromAPI(currenciesCombinationsList) {
         var to = response.ticker.target;
         var rate = response.ticker.price;
         var timestamp = response.timestamp;
-        queries.updateRatesTable(from, to, rate, timestamp); // run query to write into database
+        await queries.updateRatesTable(from, to, rate, timestamp); // run query to write into database
       }
     }
   })).catch((err) => {
-    console.error(err);
+    console.error(err.response.status);
   });
 }
 
 function getCurrenciesCombinations() {
   return queries.getCurrenciesTableData()
     .then((result) => {
-      var codes = functions.listCurrenciesCodes(result);
-      return functions.combineCurrenciesCodes(codes);
+      var codes = listCurrenciesCodes(result);
+      return combineCurrenciesCodes(codes);
+    }).catch((err) => {
+      console.log(err);
     });
 }
 
 function checkRatesAge() {
   return queries.getRatesAge()
-    .then(result => {
+    .then(async result => {
       var timeDifference = Date.now() - Date.parse(result[0].min);
       // If rates are to old run request to API
       if (timeDifference >= 10 * 60 * 1000) { // 10 minutes
-        getCurrenciesCombinations().then((result) => {
-          getRatesFromAPI(result);
+        await getCurrenciesCombinations().then(async (result) => {
+          await getRatesFromAPI(result);
           return false;
         });
       }
       return true;
+    }).catch((err) => {
+      console.log(err);
     });
 }
 

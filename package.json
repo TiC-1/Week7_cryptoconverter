@@ -4,7 +4,8 @@
   "description": "A basic crypto currency converter",
   "main": "index.js",
   "scripts": {
-    "test": "nodemon test/*.test.js | tap-spec",
+    "test:watch": "nodemon test/*.test.js | tap-spec",
+    "test": "node test/*.test.js",
     "functions": "NODE_ENV=development nodemon src/functions.js",
     "queries": "NODE_ENV=development nodemon src/database/db_queries.js"
   },

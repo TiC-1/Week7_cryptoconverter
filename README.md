@@ -1,4 +1,7 @@
 # CryptoConverter (Week7) Project
+
+[![codecov](https://codecov.io/gh/TiC-1/Week7_cryptoconverter/branch/master/graph/badge.svg)](https://codecov.io/gh/TiC-1/Week7_cryptoconverter) [![Travis](https://travis-ci.org/TiC-1/Week7_cryptoconverter.svg?branch=master)](https://travis-ci.org/TiC-1/Week7_cryptoconverter)
+
 A basic crypto currency converter
 
 ## Coding goals

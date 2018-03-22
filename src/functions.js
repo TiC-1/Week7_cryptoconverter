@@ -50,18 +50,29 @@ function getRatesFromAPI(currenciesCombinationsList) {
   });
 }
 
+function getCurrenciesCombinations() {
+  return queries.getCurrenciesTableData()
+    .then((result) => {
+      var codes = functions.listCurrenciesCodes(result);
+      return functions.combineCurrenciesCodes(codes);
+    });
+}
+
 function checkRatesAge() {
   return queries.getRatesAge()
     .then(result => {
       var timeDifference = Date.now() - Date.parse(result[0].min);
       // If rates are to old run request to API
       if (timeDifference >= 10 * 60 * 1000) { // 10 minutes
-        getRatesFromAPI();
-        return false;
+        getCurrenciesCombinations().then((result) => {
+          getRatesFromAPI(result);
+          return false;
+        });
       }
       return true;
     });
 }
+
 module.exports = {
   listCurrenciesCodes: listCurrenciesCodes,
   combineCurrenciesCodes: combineCurrenciesCodes,

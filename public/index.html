@@ -6,16 +6,18 @@
   <title>CryptoConverter</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="./style.css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/solid.css" integrity="sha384-v2Tw72dyUXeU3y4aM2Y0tBJQkGfplr39mxZqlTBDUZAb9BGoC40+rdFCG0m10lXk" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/fontawesome.css" integrity="sha384-q3jl8XQu1OpdLgGFvNRnPdj5VIlCvgsDQTQB6owSOHWlAurxul7f+JpUOVdAiJ5P" crossorigin="anonymous">
   <script src="./vue.js"></script>
 
 
 </head>
 
 <body>
+
   <header>
     <h1>CRYPTONVERTER</h1>
-    <h3>Cryptocurrency
-      <br>calculator & converter</h3>
+    <h3>Cryptocurrency calculator & converter</h3>
   </header>
 
   <div class="wrapper">
@@ -23,30 +25,34 @@
     <div id="converter">
 
       <div id="field1">
+        <p class="labelSelect">FROM: {{ front_from_currency }}</p>
         <select v-model="front_from_currency">
           <option v-for="option in options">
             {{ option }}
           </option>
         </select>
-        <span class="result">FROM: {{ front_from_currency }}</span>
+      </div>
+
+      <div class="arrow">
+        <i class="fas fa-arrow-down"></i>
       </div>
 
       <div id="field2">
+        <p class="labelSelect">TO: {{ front_to_currency }}</p>
         <select v-model="front_to_currency">
           <option v-for="option in options">
             {{ option }}
           </option>
         </select>
-        <span class="result">TO: {{ front_to_currency }}</span>
       </div>
 
       <div id="textField">
         <input v-model="message" placeholder="Enter amount">
-        <p>{{ conv_result }}</p>
+        <p class="conv">{{ conv_result }}</p>
       </div>
 
     </div>
-    
+
   </div>
 
   <footer>

@@ -9,6 +9,8 @@ function getCurrenciesTableData() {
   return db.query("SELECT * FROM currencies;")
     .then(result => {
       return (result.rows);
+    }).catch((err) => {
+      console.log(err);
     });
 }
 
@@ -17,6 +19,8 @@ function getRatesTableData() {
   return db.query("SELECT * FROM rates;")
     .then(result => {
       return (result.rows);
+    }).catch((err) => {
+      console.log(err);
     });
 }
 
@@ -26,17 +30,21 @@ function getCurrenciesAndRatesData() {
   return db.query("SELECT (SELECT name AS from_currency FROM currencies WHERE id=fromcurrency_id), (SELECT name AS to_currency FROM currencies WHERE id=tocurrency_id), rate AS change_rate FROM rates;")
     .then(result => {
       return (result.rows);
+    }).catch((err) => {
+      console.log(err);
     });
 }
 
 // Update data into rates table
-function updateRatesTable(from, to, rate, timestamp) {
-  // delete row where 'from' and 'to' currencies match to actual values
-  db.query("DELETE FROM rates WHERE fromcurrency_id=(SELECT id FROM currencies WHERE code=$1) AND tocurrency_id=(SELECT id FROM currencies WHERE code=$2);", [from, to])
-    .then(function() {
-      // add row where 'from' and 'to' currecies match to actual values
-      db.query("INSERT INTO rates VALUES ((SELECT id FROM currencies WHERE code=$1), (SELECT id FROM currencies WHERE code=$2), $3, $4);", [from, to, rate, timestamp]);
-    })
+async function updateRatesTable(from, to, rate, timestamp) {
+  try {
+    // delete row where 'from' and 'to' currencies match to actual values
+    await db.query("DELETE FROM rates WHERE fromcurrency_id=(SELECT id FROM currencies WHERE code=$1) AND tocurrency_id=(SELECT id FROM currencies WHERE code=$2);", [from, to]);
+    // add row where 'from' and 'to' currecies match to actual values
+    return await db.query("INSERT INTO rates VALUES ((SELECT id FROM currencies WHERE code=$1), (SELECT id FROM currencies WHERE code=$2), $3, to_timestamp($4)) RETURNING fromcurrency_id;", [from, to, rate, timestamp]);
+  } catch (err) {
+    console.log(err);
+  }
 }
 
 // Get oldest rate age based on his timestamp
@@ -44,6 +52,8 @@ function getRatesAge() {
   return db.query("SELECT MIN(timestamp) FROM rates;")
     .then(result => {
       return (result.rows);
+    }).catch((err) => {
+      console.log(err);
     });
 }
 

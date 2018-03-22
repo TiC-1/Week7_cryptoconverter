@@ -11,12 +11,9 @@ var params = url.parse(process.env.DATABASE_URL);
 var userPass = params.auth.split(":");
 
 var options = {
-  host: params.hostname,
-  port: params.port,
-  database: params.pathname.split("/")[1],
+  connectionString: process.env.DATABASE_URL,
   max: process.env.DB_MAX_CONNECTIONS || 2,
-  user: userPass[0],
-  password: userPass[1],
+  ssl: true,
 }
 
 var pool = new Pool(options);

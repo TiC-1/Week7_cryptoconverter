@@ -31,33 +31,55 @@ function combineCurrenciesCodes(currenciesCodesList) {
 
 // get change rates from 'cryptonator' API based on currencies combinations
 function getRatesFromAPI(currenciesCombinationsList) {
-  currenciesCombinationsList.forEach(element => {
-    var endURL = element.toLowerCase();
-    axios.get("https://api.cryptonator.com/api/ticker/" + endURL, {
-        maxRedirects: 5
-      })
-      .then(response => {
-        response = response.data;
+  var requests = currenciesCombinationsList.map( (e) => {
+    return axios.get("https://api.cryptonator.com/api/ticker/" + e.toLowerCase());
+  })
+  return axios.all(requests).then(axios.spread(async (...results) => {
+    for(var i=0; i<results.length; i++) {
+      response = results[i].data;
+      if(response.ticker) {
         var from = response.ticker.base;
         var to = response.ticker.target;
         var rate = response.ticker.price;
         var timestamp = response.timestamp;
-        queries.updateRatesTable(from, to, rate, timestamp); // run query to write into database
-      });
+        await queries.updateRatesTable(from, to, rate, timestamp); // run query to write into database
+      }
+    }
+  })).catch((err) => {
+    console.error(err.response.status);
   });
 }
 
-function checkRatesAge() {
-  queries.getRatesAge()
-    .then(result => {
-      // If rates are to old run request to API
-      if (Date.now() - result >= 10 * 60 * 1000) { // 10 minutes
-        getRatesFromAPI();
-      }
+function getCurrenciesCombinations() {
+  return queries.getCurrenciesTableData()
+    .then((result) => {
+      var codes = listCurrenciesCodes(result);
+      return combineCurrenciesCodes(codes);
+    }).catch((err) => {
+      console.log(err);
     });
 }
+
+function checkRatesAge() {
+  return queries.getRatesAge()
+    .then(async result => {
+      var timeDifference = Date.now() - Date.parse(result[0].min);
+      // If rates are to old run request to API
+      if (timeDifference >= 10 * 60 * 1000) { // 10 minutes
+        await getCurrenciesCombinations().then(async (result) => {
+          await getRatesFromAPI(result);
+          return false;
+        });
+      }
+      return true;
+    }).catch((err) => {
+      console.log(err);
+    });
+}
+
 module.exports = {
   listCurrenciesCodes: listCurrenciesCodes,
   combineCurrenciesCodes: combineCurrenciesCodes,
-  getRatesFromAPI: getRatesFromAPI
+  getRatesFromAPI: getRatesFromAPI,
+  checkRatesAge: checkRatesAge
 }

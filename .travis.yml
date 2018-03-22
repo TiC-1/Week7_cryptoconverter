@@ -1,3 +1,9 @@
 language: node_js
 node_js:
- - "node"
+  - node
+services:
+  - postgresql
+before_script:
+  - psql -c 'CREATE DATABASE cryptofyck;' -U postgres
+env:
+  - DATABASE_URL=postgres://postgres@localhost:5432/cryptofyck

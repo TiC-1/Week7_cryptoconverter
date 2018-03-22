@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test:watch": "nodemon test/*.test.js | tap-spec",
-    "test": "istanbul cover tape test/*.test.js"
+    "test": "istanbul cover tape test/*.test.js",
+    "dev": "nodemon server.js"
   },
   "repository": {
     "type": "git",
@@ -21,6 +22,7 @@
     "axios": "^0.18.0",
     "env2": "^2.2.0",
     "express": "^4.16.3",
+    "express-handlebars": "^3.0.0",
     "handlebars": "^4.0.11",
     "pg": "^7.4.1"
   },

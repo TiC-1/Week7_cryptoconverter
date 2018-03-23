@@ -65,7 +65,7 @@ function checkRatesAge() {
     .then(async result => {
       var timeDifference = Date.now() - Date.parse(result[0].min);
       // If rates are to old run request to API
-      if (timeDifference >= 10 * 60 * 1000) { // 10 minutes
+      if (timeDifference >= 2 * 60 * 1000) { // 2 minutes
         await getCurrenciesCombinations().then(async (result) => {
           await getRatesFromAPI(result);
           return false;

@@ -24,6 +24,11 @@
 
     <div id="converter">
 
+      <div id="textField">
+        <input v-model="message" placeholder="Enter amount">
+      </div>
+
+
       <div id="field1">
         <p class="labelSelect">FROM: {{ front_from_currency }}</p>
         <select v-model="front_from_currency">
@@ -46,17 +51,16 @@
         </select>
       </div>
 
-      <div id="textField">
-        <input v-model="message" placeholder="Enter amount">
-        <p class="conv">{{ conv_result }}</p>
-      </div>
+      <p class="conv">The conversion is: <br> {{ conv_result }} {{ front_to_currency }}</p>
+
+
 
     </div>
 
   </div>
 
   <footer>
-    <p class="footerText">© TiC-1 APP | follow us:</i>  <a href="https://github.com/TiC-1"><i class="fa fa-github-square git"></i></a></p>
+    <p class="footerText">© TiC-1 APP | follow us:</i>  <a href="https://github.com/TiC-1" target="_blank"><i class="fa fa-github-square git"></i></a></p>
   </footer>
 
   <script src="./object.js"></script>

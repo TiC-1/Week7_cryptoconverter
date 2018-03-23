@@ -4,6 +4,8 @@
 
 A basic crypto currency converter
 
+![composite](https://user-images.githubusercontent.com/24767679/37833546-d95f18b8-2eab-11e8-9111-74604c58f599.jpg)
+
 ## Coding goals
 JS fullstack development using:
 - Back-end:

@@ -63,7 +63,7 @@ body {
 }
 
 header {
-  padding: 1.5em 1.5em;
+  padding: 1.1em 1.1em;
   background-color: #0F3334;
 	/* background-image: url("header.jpg"); */
 }
@@ -84,10 +84,14 @@ h3 {
 }
 
 .wrapper {
+  height: 70vh;
 	margin: auto;
   padding: 0.7em 0.7em 0.7em 0.7em;
 }
 
+.git {
+  color: white;
+}
 
 .arrow {
 	color: #0F3334;
@@ -191,13 +195,13 @@ body {
 }
 
 footer {
-	background-color: #f9f9f9;
+	background-color: black;
 	height: 5em;
 }
 
 .footerText {
 	padding-top: 2em;
-	color: black;
+	color: white;
 	font-weight: 400;
 }
 

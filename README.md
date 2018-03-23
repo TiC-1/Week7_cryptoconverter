@@ -4,7 +4,7 @@
 
 A basic crypto currency converter
 
-![composite](https://user-images.githubusercontent.com/24767679/37833546-d95f18b8-2eab-11e8-9111-74604c58f599.jpg)
+![composite](https://user-images.githubusercontent.com/24767679/37833705-4a8fc816-2eac-11e8-9acb-d9bcc6b9eae9.jpg)
 
 ## Coding goals
 JS fullstack development using:
